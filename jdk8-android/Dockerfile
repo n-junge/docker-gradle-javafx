@@ -8,8 +8,9 @@ ENV ANDROID_COMPILE_SDK="25"
 ENV ANDROID_BUILD_TOOLS="25.0.3"
 ENV ANDROID_SDK_TOOLS="25.2.5"
 
+USER root
 RUN apt-get --quiet update --yes \
-	&& apt-get --quiet install --yes wget tar unzip lib32stdc++6 lib32z1 \
+	&& apt-get --quiet install --yes wget tar unzip lib32stdc++6-amd64-cross \
 	&& wget --quiet --output-document=android-sdk.zip https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip \
 	&& unzip -q android-sdk.zip -d android-sdk-linux \
 	&& mkdir android-sdk-linux/licenses \
@@ -17,5 +18,6 @@ RUN apt-get --quiet update --yes \
 	&& printf "84831b9409646a918e30573bab4c9c91346d8abd" > android-sdk-linux/licenses/android-sdk-preview-license \
 	&& android-sdk-linux/tools/bin/sdkmanager --update > update.log \
 	&& android-sdk-linux/tools/bin/sdkmanager "platforms;android-${ANDROID_COMPILE_SDK}" "build-tools;${ANDROID_BUILD_TOOLS}" "extras;google;m2repository" "extras;android;m2repository" > installPlatform.log
-	
+
+USER gradle
 WORKDIR /home/gradle
