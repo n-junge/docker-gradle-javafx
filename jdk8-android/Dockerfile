@@ -17,6 +17,4 @@ RUN mkdir android-sdk-linux/licenses \
 	&& printf "84831b9409646a918e30573bab4c9c91346d8abd" > android-sdk-linux/licenses/android-sdk-preview-license \
 	&& android-sdk-linux/tools/bin/sdkmanager --update > update.log \
 	&& android-sdk-linux/tools/bin/sdkmanager "platforms;android-${ANDROID_COMPILE_SDK}" "build-tools;${ANDROID_BUILD_TOOLS}" "extras;google;m2repository" "extras;android;m2repository" > installPlatform.log
-
-USER gradle
-WORKDIR /home/gradle
+RUN chmod 777 -R android-sdk-linux
