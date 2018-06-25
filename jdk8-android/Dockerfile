@@ -10,6 +10,7 @@ ENV ANDROID_SDK_TOOLS="25.2.5"
 
 USER root
 RUN apt-get --quiet update --yes \
+	&& apt-get --quiet install --yes lib32stdc++6 lib32z1
 	&& wget --quiet --output-document=android-sdk.zip https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip \
 	&& unzip -q android-sdk.zip -d android-sdk-linux
 RUN mkdir android-sdk-linux/licenses \
