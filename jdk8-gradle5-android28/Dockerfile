@@ -15,10 +15,21 @@ RUN apt-get --quiet update --yes \
 	&& unzip -q android-sdk.zip -d android-sdk-linux
 	
 RUN mkdir ~/.android && echo '### User Sources for Android SDK Manager' > ~/.android/repositories.cfg
+RUN yes | android-sdk-linux/tools/bin/sdkmanager --licenses && yes | android-sdk-linux/tools/bin/sdkmanager --update
 
-RUN mkdir android-sdk-linux/licenses \
-	&& printf "8933bad161af4178b1185d1a37fbf41ea5269c55\nd56f5187479451eabf01fb78af6dfcb131a6481e" > android-sdk-linux/licenses/android-sdk-license \
-	&& printf "84831b9409646a918e30573bab4c9c91346d8abd" > android-sdk-linux/licenses/android-sdk-preview-license \
-	&& android-sdk-linux/tools/bin/sdkmanager --update > update.log \
-	&& android-sdk-linux/tools/bin/sdkmanager "platforms;android-24" "platforms;android-26" "platforms;android-28" "build-tools;${ANDROID_BUILD_TOOLS}" "extras;google;m2repository" "extras;android;m2repository" > installPlatform.log
+# Update SDK manager and install system image, platform and build tools
+RUN android-sdk-linux/tools/bin/sdkmanager \
+  "tools" \
+  "platform-tools" \
+  "emulator"
+  
+RUN android-sdk-linux/tools/bin/sdkmanager \
+  "build-tools;${ANDROID_BUILD_TOOLS}" \
+  "extras;google;m2repository" \
+  "extras;android;m2repository"
+
+RUN android-sdk-linux/tools/bin/sdkmanager "platforms;android-24" \
+	"platforms;android-26" \
+	"platforms;android-28"
+
 RUN chmod 777 -R android-sdk-linux
